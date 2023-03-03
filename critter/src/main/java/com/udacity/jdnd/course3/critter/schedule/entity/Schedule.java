@@ -1,6 +1,6 @@
 package com.udacity.jdnd.course3.critter.schedule.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +27,7 @@ public class Schedule {
 	@ManyToMany(targetEntity = Pet.class)
 	private List<Pet> pets;
 
-	private LocalDateTime date;
+	private LocalDate date;
 
 	@ElementCollection(targetClass = EmployeeSkill.class)
 	@Enumerated(EnumType.STRING)
