@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @DiscriminatorValue("1")
-public class Employee extends User {
+public class Employee extends Users {
 
 	@ElementCollection
 //    @CollectionTable(name="skills")

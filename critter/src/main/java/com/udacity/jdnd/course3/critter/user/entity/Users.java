@@ -11,7 +11,7 @@ import lombok.Data;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="user_type", 
 discriminatorType = DiscriminatorType.INTEGER)
-public abstract class User {
+public abstract class Users {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

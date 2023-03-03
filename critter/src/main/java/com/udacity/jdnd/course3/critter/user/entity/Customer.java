@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @DiscriminatorValue("2")
-public class Customer extends User {
+public class Customer extends Users {
 
 	@Column(nullable = false)
 	private String phoneNumber;
