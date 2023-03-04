@@ -1,6 +1,6 @@
 package com.udacity.jdnd.course3.critter.pet.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.*;
 
@@ -32,7 +32,7 @@ public class Pet {
 //	private Schedule schedule;
 
 	@Column(nullable = true)
-	private Date dateOfBirth;
+	private LocalDate birthDate;
 
 	@Column(nullable = true)
 	private String notes;

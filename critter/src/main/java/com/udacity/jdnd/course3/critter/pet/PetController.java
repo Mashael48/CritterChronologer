@@ -1,8 +1,9 @@
 package com.udacity.jdnd.course3.critter.pet;
 
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Handles web requests related to Pets.
@@ -11,23 +12,26 @@ import java.util.List;
 @RequestMapping("/pet")
 public class PetController {
 
-    @PostMapping
-    public PetDTO savePet(@RequestBody PetDTO petDTO) {
-        throw new UnsupportedOperationException();
-    }
+	@Autowired
+	private PetService petService;
 
-    @GetMapping("/{petId}")
-    public PetDTO getPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
-    }
+	@PostMapping
+	public PetDTO savePet(@RequestBody PetDTO petDTO) {
+		return petService.savePet(petDTO);
+	}
 
-    @GetMapping
-    public List<PetDTO> getPets(){
-        throw new UnsupportedOperationException();
-    }
+	@GetMapping("/{petId}")
+	public PetDTO getPet(@PathVariable Long petId) {
+		return petService.getPet(petId);
+	}
 
-    @GetMapping("/owner/{ownerId}")
-    public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        throw new UnsupportedOperationException();
-    }
+	@GetMapping
+	public List<PetDTO> getPets() {
+		return petService.getPets();
+	}
+
+	@GetMapping("/owner/{ownerId}")
+	public List<PetDTO> getPetsByOwner(@PathVariable Long ownerId) {
+		return petService.getPetsByOwner(ownerId);
+	}
 }

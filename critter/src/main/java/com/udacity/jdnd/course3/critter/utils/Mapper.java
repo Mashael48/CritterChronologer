@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.udacity.jdnd.course3.critter.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.pet.entity.Pet;
 import com.udacity.jdnd.course3.critter.user.CustomerDTO;
 import com.udacity.jdnd.course3.critter.user.EmployeeDTO;
@@ -59,5 +60,24 @@ public class Mapper {
 				.map(Mapper::convertEmployeeToEmployeeDTO)
 				.toList();
 	}
+	
+	public static Pet convertPetDTOToPet(PetDTO petDTO) {
+		Pet pet = new Pet();
+		BeanUtils.copyProperties(petDTO, pet);
 
+		return pet;
+	}
+
+	public static PetDTO convertPetToPetDTO(Pet pet) {
+		PetDTO petDTO = new PetDTO();
+		BeanUtils.copyProperties(pet, petDTO);
+
+		return petDTO;
+	}
+	
+	public static List<PetDTO> convertPetToPetDTO(List<Pet> pet) {
+		return pet.stream()
+				.map(Mapper::convertPetToPetDTO)
+				.toList();
+	}
 }
