@@ -21,6 +21,11 @@ public class UserService {
 	@Autowired
 	private EmployeeRepo employeeRepo;
 
+	public CustomerDTO getCustomerById(Long customerId) {
+		return Mapper
+				.convertCustomerToCustomerDTO(customerRepo.findById(customerId).orElseThrow(NotFoundException::new));
+	}
+
 	public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
 
 		Customer customer = Mapper.convertCustomerDTOToCustomer(customerDTO);
@@ -88,4 +93,5 @@ public class UserService {
 		List<Employee> employees = employeeRepo.findAll();
 		return Mapper.convertEmployeeToEmployeeDTO(employees);
 	}
+
 }
