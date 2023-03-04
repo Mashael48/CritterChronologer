@@ -4,13 +4,14 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Nationalized;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Setter
+@Getter
+@ToString
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="user_type", 
-discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Users {
 
 	@Id

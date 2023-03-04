@@ -6,12 +6,12 @@ import javax.persistence.*;
 
 import com.udacity.jdnd.course3.critter.pet.entity.Pet;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Setter
+@Getter
+@ToString
 @DiscriminatorValue("2")
 public class Customer extends Users {
 

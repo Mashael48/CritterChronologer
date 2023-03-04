@@ -10,10 +10,12 @@ import com.udacity.jdnd.course3.critter.pet.entity.Pet;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.user.entity.Employee;
 
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Setter
+@Getter
+@ToString
 public class Schedule {
 
 	@Id

@@ -7,13 +7,14 @@ import javax.persistence.*;
 import org.hibernate.annotations.Nationalized;
 
 import com.udacity.jdnd.course3.critter.pet.PetType;
-import com.udacity.jdnd.course3.critter.schedule.entity.Schedule;
 import com.udacity.jdnd.course3.critter.user.entity.Customer;
 
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Setter
+@Getter
+@ToString
 public class Pet {
 
 	@Id
@@ -28,9 +29,9 @@ public class Pet {
 	@Column(nullable = false)
 	private PetType type;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "schedule_id", nullable = true)
-	private Schedule schedule;
+//	@OneToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "schedule_id", nullable = true)
+//	private Schedule schedule;
 
 	@Column(nullable = true)
 	private LocalDate birthDate;
