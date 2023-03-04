@@ -17,13 +17,12 @@ import lombok.Data;
 public class Schedule {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToMany(targetEntity = Employee.class)
 	private List<Employee> employees;
 
-	// fetch = FetchType.LAZY, mappedBy = "schedule", cascade = CascadeType.ALL
 	@ManyToMany(targetEntity = Pet.class)
 	private List<Pet> pets;
 

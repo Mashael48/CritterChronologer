@@ -8,5 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.udacity.jdnd.course3.critter.user.entity.Employee;
 
 public interface EmployeeRepo extends JpaRepository<Employee, Long> {
-	public List<Employee> findEmployeesByDaysAvailable(DayOfWeek day);
+
+	List<Employee> findAllByIdIn(List<Long> ids);
+
+	List<Employee> findByDaysAvailable(DayOfWeek day);
 }

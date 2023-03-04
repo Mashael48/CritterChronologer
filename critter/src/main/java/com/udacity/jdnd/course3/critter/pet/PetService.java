@@ -8,14 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.udacity.jdnd.course3.critter.exception.NotFoundException;
 import com.udacity.jdnd.course3.critter.pet.entity.Pet;
-import com.udacity.jdnd.course3.critter.user.CustomerDTO;
-import com.udacity.jdnd.course3.critter.user.UserService;
+import com.udacity.jdnd.course3.critter.user.CustomerRepo;
 import com.udacity.jdnd.course3.critter.user.entity.Customer;
 import com.udacity.jdnd.course3.critter.utils.Mapper;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class PetService {
 
@@ -23,29 +19,23 @@ public class PetService {
 	private PetRepo petRepo;
 
 	@Autowired
-	private UserService userService;
-
-	public List<Pet> findByIds(List<Long> petsIds) {
-		return petRepo.findAllById(petsIds);
-	}
+	private CustomerRepo customerRepo;
 
 	public PetDTO savePet(PetDTO petDTO) {
 
-		Customer customer = null;
-		if (petDTO.getOwnerId() != null && petDTO.getOwnerId() != 0) {
-
-			try {
-				CustomerDTO customerDTO = this.userService.getOwnerByPet(petDTO.getOwnerId());
-				customer = Mapper.convertCustomerDTOToCustomer(customerDTO);
-			} catch (@SuppressWarnings("unused") Exception e) {
-				log.warn("Customer id has not been provided");
-			}
+		if (petDTO.getOwnerId() == null) { // Pets customer_id not nullable, thus null not accepted
+			throw new NotFoundException();
 		}
 
-		Pet pet = Mapper.convertPetDTOToPet(petDTO);
-		pet.setCustomer(customer);
+		Optional<Customer> customer = customerRepo.findById(petDTO.getOwnerId());
 
-		return petDTO;
+		if (customer.isEmpty())
+			throw new NotFoundException();
+
+		Pet pet = Mapper.convertPetDTOToPet(petDTO);
+		pet.setCustomer(customer.get());
+
+		return Mapper.convertPetToPetDTO(petRepo.save(pet));
 	}
 
 	public PetDTO getPet(Long petId) {
@@ -63,7 +53,7 @@ public class PetService {
 	}
 
 	public List<PetDTO> getPetsByOwner(Long ownerId) {
-		List<Pet> pets = petRepo.findPetsByCustomerId(ownerId);
+		List<Pet> pets = petRepo.findByCustomerId(ownerId);
 		return Mapper.convertPetToPetDTO(pets);
 	}
 

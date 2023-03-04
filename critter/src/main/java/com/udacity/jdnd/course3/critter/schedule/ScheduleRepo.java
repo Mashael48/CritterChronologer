@@ -8,8 +8,8 @@ import com.udacity.jdnd.course3.critter.schedule.entity.Schedule;
 
 public interface ScheduleRepo extends JpaRepository<Schedule, Long> {
 
-	List<Schedule> getScheduleByPetsId(Long id);
+	List<Schedule> getByPetsId(Long id);
 
-	List<Schedule> getScheduleByEmployeesId(Long employeeId);
+	List<Schedule> getByEmployeesId(Long employeeId);
 
 }

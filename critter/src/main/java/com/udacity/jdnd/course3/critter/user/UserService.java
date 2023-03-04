@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.udacity.jdnd.course3.critter.exception.NotFoundException;
-import com.udacity.jdnd.course3.critter.pet.PetService;
 import com.udacity.jdnd.course3.critter.user.entity.Customer;
 import com.udacity.jdnd.course3.critter.user.entity.Employee;
 import com.udacity.jdnd.course3.critter.utils.Mapper;
@@ -22,16 +21,10 @@ public class UserService {
 	@Autowired
 	private EmployeeRepo employeeRepo;
 
-	@Autowired
-	private PetService petService;
-
 	public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
 
 		Customer customer = Mapper.convertCustomerDTOToCustomer(customerDTO);
-		customer.setPets(petService.findByIds(customerDTO.getPetIds()));
-
-		customerRepo.save(customer);
-		return customerDTO;
+		return Mapper.convertCustomerToCustomerDTO(customerRepo.save(customer));
 	}
 
 	public List<CustomerDTO> getAllCustomers() {
@@ -50,9 +43,7 @@ public class UserService {
 
 	public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
 		Employee employee = Mapper.convertEmployeeDTOToEmployee(employeeDTO);
-		employeeRepo.save(employee);
-
-		return employeeDTO;
+		return Mapper.convertEmployeeToEmployeeDTO(employeeRepo.save(employee));
 	}
 
 	public EmployeeDTO getEmployee(Long employeeId) {
@@ -64,14 +55,16 @@ public class UserService {
 		return Mapper.convertEmployeeToEmployeeDTO(employee.get());
 	}
 
-	public Object setAvailability(Set<DayOfWeek> daysAvailable, Long employeeId) {
+	public boolean setAvailability(Set<DayOfWeek> daysAvailable, Long employeeId) {
 		Optional<Employee> employee = employeeRepo.findById(employeeId);
 
 		if (employee.isEmpty())
 			throw new NotFoundException();
 
 		employee.get().setDaysAvailable(daysAvailable);
-		return employeeRepo.save(employee.get());
+		employeeRepo.save(employee.get());
+
+		return true;
 	}
 
 	public List<EmployeeDTO> findEmployeesForService(EmployeeRequestDTO employeeDTO) {
@@ -81,7 +74,7 @@ public class UserService {
 
 	private List<Employee> findEmployeesForService(Set<EmployeeSkill> skills, LocalDate date) {
 		List<Employee> availableEmployees = new LinkedList<>();
-		List<Employee> employees = this.employeeRepo.findEmployeesByDaysAvailable(date.getDayOfWeek());
+		List<Employee> employees = employeeRepo.findByDaysAvailable(date.getDayOfWeek());
 
 		for (Employee employee : employees) {
 			if (employee.getSkills().containsAll(skills)) {
@@ -89,5 +82,10 @@ public class UserService {
 			}
 		}
 		return availableEmployees;
+	}
+
+	public List<EmployeeDTO> findAllEmployees() {
+		List<Employee> employees = employeeRepo.findAll();
+		return Mapper.convertEmployeeToEmployeeDTO(employees);
 	}
 }

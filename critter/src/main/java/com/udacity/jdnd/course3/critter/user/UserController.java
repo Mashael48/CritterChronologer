@@ -47,13 +47,18 @@ public class UserController {
 	}
 
 	@PutMapping("/employee/{employeeId}")
-	public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable Long employeeId) {
-		userService.setAvailability(daysAvailable, employeeId);
+	public boolean setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable Long employeeId) {
+		return userService.setAvailability(daysAvailable, employeeId);
 	}
 
 	@GetMapping("/employee/availability")
 	public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
 		return userService.findEmployeesForService(employeeDTO);
+	}
+
+	@GetMapping("/employee")
+	public List<EmployeeDTO> findEmployees() {
+		return userService.findAllEmployees();
 	}
 
 }

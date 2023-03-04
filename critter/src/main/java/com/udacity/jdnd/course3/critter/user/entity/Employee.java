@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.udacity.jdnd.course3.critter.schedule.entity.Schedule;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 
 import lombok.Data;
@@ -27,5 +28,9 @@ public class Employee extends Users {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
 	private Set<DayOfWeek> daysAvailable;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "employee_schedule_id", nullable = true)
+	private Schedule schedule;
 
 }

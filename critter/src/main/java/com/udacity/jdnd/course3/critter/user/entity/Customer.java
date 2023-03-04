@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("2")
 public class Customer extends Users {
 
-	@Column(nullable = false)
+	@Column(nullable = true) // to allow adding employee without it
 	private String phoneNumber;
 
 	@Column(nullable = true)
