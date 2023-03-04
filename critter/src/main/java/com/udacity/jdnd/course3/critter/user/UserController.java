@@ -7,6 +7,10 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.udacity.jdnd.course3.critter.user.entity.Customer;
+import com.udacity.jdnd.course3.critter.user.entity.Employee;
+import com.udacity.jdnd.course3.critter.utils.Mapper;
+
 /**
  * Handles web requests related to Users.
  *
@@ -17,10 +21,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-	
+
 	@GetMapping("/customer/{customerId}")
 	public CustomerDTO getCustomerById(@PathVariable Long customerId) {
-		return userService.getCustomerById(customerId);
+		return Mapper.convertCustomerToCustomerDTO(userService.getCustomerById(customerId));
 	}
 
 	@Autowired
@@ -28,27 +32,29 @@ public class UserController {
 
 	@PostMapping("/customer")
 	public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
-		return userService.saveCustomer(customerDTO);
+		Customer customer = Mapper.convertCustomerDTOToCustomer(customerDTO);
+		return Mapper.convertCustomerToCustomerDTO(userService.saveCustomer(customer));
 	}
 
 	@GetMapping("/customer")
 	public List<CustomerDTO> getAllCustomers() {
-		return userService.getAllCustomers();
+		return Mapper.convertCustomerToCustomerDTO(userService.getAllCustomers());
 	}
 
 	@GetMapping("/customer/pet/{petId}")
 	public CustomerDTO getOwnerByPet(@PathVariable Long petId) {
-		return userService.getOwnerByPet(petId);
+		return Mapper.convertCustomerToCustomerDTO(userService.getOwnerByPet(petId));
 	}
 
 	@PostMapping("/employee")
 	public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-		return userService.saveEmployee(employeeDTO);
+		Employee employee = Mapper.convertEmployeeDTOToEmployee(employeeDTO);
+		return Mapper.convertEmployeeToEmployeeDTO(userService.saveEmployee(employee));
 	}
 
 	@PostMapping("/employee/{employeeId}")
 	public EmployeeDTO getEmployee(@PathVariable Long employeeId) {
-		return userService.getEmployee(employeeId);
+		return Mapper.convertEmployeeToEmployeeDTO(userService.getEmployee(employeeId));
 	}
 
 	@PutMapping("/employee/{employeeId}")
@@ -58,12 +64,12 @@ public class UserController {
 
 	@GetMapping("/employee/availability")
 	public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-		return userService.findEmployeesForService(employeeDTO);
+		return Mapper.convertEmployeeToEmployeeDTO(userService.findEmployeesForService(employeeDTO));
 	}
 
 	@GetMapping("/employee")
 	public List<EmployeeDTO> findEmployees() {
-		return userService.findAllEmployees();
+		return Mapper.convertEmployeeToEmployeeDTO(userService.findAllEmployees());
 	}
 
 }

@@ -14,7 +14,6 @@ import com.udacity.jdnd.course3.critter.user.CustomerRepo;
 import com.udacity.jdnd.course3.critter.user.EmployeeRepo;
 import com.udacity.jdnd.course3.critter.user.entity.Customer;
 import com.udacity.jdnd.course3.critter.user.entity.Employee;
-import com.udacity.jdnd.course3.critter.utils.Mapper;
 
 @Service
 @Transactional
@@ -32,54 +31,49 @@ public class ScheduleService {
 	@Autowired
 	private PetRepo petRepo;
 
-	public ScheduleDTO createSchedule(ScheduleDTO scheduleDTO) {
+	public Schedule getScheduleLists(List<Long> employeesIds, List<Long> petsIds) {
 
-		if (scheduleDTO.getEmployeeIds() == null && scheduleDTO.getPetIds() == null) {
+		List<Employee> employees = employeeRepo.findAllByIdIn(employeesIds);
+		List<Pet> pets = petRepo.findAllByIdIn(petsIds);
+
+		Schedule schedule = new Schedule();
+		schedule.setEmployees(employees);
+		schedule.setPets(pets);
+
+		return schedule;
+	}
+
+	public Schedule createSchedule(Schedule schedule) {
+		return scheduleRepo.save(schedule);
+	}
+
+	public List<Schedule> getAllSchedules() {
+		return scheduleRepo.findAll();
+	}
+
+	public List<Schedule> getScheduleForPet(Long petId) {
+		return scheduleRepo.getByPetsId(petId);
+	}
+
+	public List<Schedule> getScheduleForEmployee(Long employeeId) {
+		return scheduleRepo.getByEmployeesId(employeeId);
+	}
+
+	public List<Schedule> getScheduleForCustomer(Long customerId) {
+		Optional<Customer> customer = customerRepo.findById(customerId);
+
+		if (customer.isEmpty()) {
 			throw new NotFoundException();
 		}
 
-		List<Employee> employees = employeeRepo.findAllByIdIn(scheduleDTO.getEmployeeIds());
-		List<Pet> pets = petRepo.findAllByIdIn(scheduleDTO.getPetIds());
-
-		if (employees.size() != scheduleDTO.getEmployeeIds().size() || pets.size() != scheduleDTO.getPetIds().size()) {
-			throw new NotFoundException();
-		}
-
-		Schedule schedule = Mapper.convertScheduleDTOToSchedule(scheduleDTO, employees, pets);
-		return Mapper.convertScheduleToScheduleDTO(scheduleRepo.save(schedule));
-	}
-
-	public List<ScheduleDTO> getAllSchedules() {
-		List<Schedule> schedules = scheduleRepo.findAll();
-		return Mapper.convertScheduleToScheduleDTO(schedules);
-	}
-
-	public List<ScheduleDTO> getScheduleForPet(Long petId) {
-		List<Schedule> schedules = scheduleRepo.getByPetsId(petId);
-		return Mapper.convertScheduleToScheduleDTO(schedules);
-	}
-
-	public List<ScheduleDTO> getScheduleForEmployee(Long employeeId) {
-		List<Schedule> schedules = scheduleRepo.getByEmployeesId(employeeId);
-		return Mapper.convertScheduleToScheduleDTO(schedules);
-	}
-
-	public List<ScheduleDTO> getScheduleForCustomer(Long customerId) {
-		Optional<Customer> optionalCustomer = customerRepo.findById(customerId);
-
-		if (optionalCustomer.isEmpty()) {
-			throw new NotFoundException();
-		}
-
-		Customer customer = optionalCustomer.get();
-		List<Pet> pets = customer.getPets();
-		List<Schedule> schedules = new ArrayList<>();
+		List<Pet> pets = customer.get().getPets();
+		List<Schedule> schedules = new LinkedList<>();
 
 		for (Pet pet : pets) {
 			schedules.addAll(scheduleRepo.getByPetsId(pet.getId()));
 		}
 
-		return Mapper.convertScheduleToScheduleDTO(schedules);
+		return schedules;
 	}
 
 }

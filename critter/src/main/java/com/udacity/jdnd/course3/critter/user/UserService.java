@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.udacity.jdnd.course3.critter.exception.NotFoundException;
 import com.udacity.jdnd.course3.critter.user.entity.Customer;
 import com.udacity.jdnd.course3.critter.user.entity.Employee;
-import com.udacity.jdnd.course3.critter.utils.Mapper;
 
 @Service
 @Transactional
@@ -23,43 +22,38 @@ public class UserService {
 	@Autowired
 	private EmployeeRepo employeeRepo;
 
-	public CustomerDTO getCustomerById(Long customerId) {
-		return Mapper
-				.convertCustomerToCustomerDTO(customerRepo.findById(customerId).orElseThrow(NotFoundException::new));
+	public Customer getCustomerById(Long customerId) {
+		return customerRepo.findById(customerId).orElseThrow(NotFoundException::new);
 	}
 
-	public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
-
-		Customer customer = Mapper.convertCustomerDTOToCustomer(customerDTO);
-		return Mapper.convertCustomerToCustomerDTO(customerRepo.save(customer));
+	public Customer saveCustomer(Customer customer) {
+		return customerRepo.save(customer);
 	}
 
-	public List<CustomerDTO> getAllCustomers() {
-		List<Customer> customers = customerRepo.findAll();
-		return Mapper.convertCustomerToCustomerDTO(customers);
+	public List<Customer> getAllCustomers() {
+		return customerRepo.findAll();
 	}
 
-	public CustomerDTO getOwnerByPet(Long petId) {
+	public Customer getOwnerByPet(Long petId) {
 		Optional<Customer> customer = customerRepo.findByPetsId(petId);
 
 		if (customer.isEmpty())
 			throw new NotFoundException();
 
-		return Mapper.convertCustomerToCustomerDTO(customer.get());
+		return customer.get();
 	}
 
-	public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
-		Employee employee = Mapper.convertEmployeeDTOToEmployee(employeeDTO);
-		return Mapper.convertEmployeeToEmployeeDTO(employeeRepo.save(employee));
+	public Employee saveEmployee(Employee employee) {
+		return employeeRepo.save(employee);
 	}
 
-	public EmployeeDTO getEmployee(Long employeeId) {
+	public Employee getEmployee(Long employeeId) {
 		Optional<Employee> employee = employeeRepo.findById(employeeId);
 
 		if (employee.isEmpty())
 			throw new NotFoundException();
 
-		return Mapper.convertEmployeeToEmployeeDTO(employee.get());
+		return employee.get();
 	}
 
 	public boolean setAvailability(Set<DayOfWeek> daysAvailable, Long employeeId) {
@@ -74,9 +68,8 @@ public class UserService {
 		return true;
 	}
 
-	public List<EmployeeDTO> findEmployeesForService(EmployeeRequestDTO employeeDTO) {
-		List<Employee> employees = findEmployeesForService(employeeDTO.getSkills(), employeeDTO.getDate());
-		return Mapper.convertEmployeeToEmployeeDTO(employees);
+	public List<Employee> findEmployeesForService(EmployeeRequestDTO employeeDTO) {
+		return findEmployeesForService(employeeDTO.getSkills(), employeeDTO.getDate());
 	}
 
 	private List<Employee> findEmployeesForService(Set<EmployeeSkill> skills, LocalDate date) {
@@ -91,9 +84,8 @@ public class UserService {
 		return availableEmployees;
 	}
 
-	public List<EmployeeDTO> findAllEmployees() {
-		List<Employee> employees = employeeRepo.findAll();
-		return Mapper.convertEmployeeToEmployeeDTO(employees);
+	public List<Employee> findAllEmployees() {
+		return employeeRepo.findAll();
 	}
 
 }
