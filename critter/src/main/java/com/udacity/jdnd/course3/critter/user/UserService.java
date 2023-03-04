@@ -4,7 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +27,10 @@ public class UserService {
 
 	public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
 
-		Customer customer = new Customer();
-		BeanUtils.copyProperties(customerDTO, customer);
-
+		Customer customer = Mapper.convertCustomerDTOToCustomer(customerDTO);
 		customer.setPets(petService.findByIds(customerDTO.getPetIds()));
-		customerRepo.save(customer);
 
+		customerRepo.save(customer);
 		return customerDTO;
 	}
 
@@ -52,8 +49,7 @@ public class UserService {
 	}
 
 	public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
-		Employee employee = new Employee();
-		BeanUtils.copyProperties(employeeDTO, employee);
+		Employee employee = Mapper.convertEmployeeDTOToEmployee(employeeDTO);
 		employeeRepo.save(employee);
 
 		return employeeDTO;

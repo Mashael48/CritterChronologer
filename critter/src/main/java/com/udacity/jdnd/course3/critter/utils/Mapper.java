@@ -13,6 +13,13 @@ import com.udacity.jdnd.course3.critter.user.entity.Employee;
 
 public class Mapper {
 	
+	public static Customer convertCustomerDTOToCustomer(CustomerDTO customerDTO) {
+		Customer customer = new Customer();
+		BeanUtils.copyProperties(customerDTO, customer);
+
+		return customer;
+	}
+
 	public static CustomerDTO convertCustomerToCustomerDTO(Customer customer) {
 		CustomerDTO customerDTO = new CustomerDTO();
 		BeanUtils.copyProperties(customer, customerDTO);
@@ -31,6 +38,14 @@ public class Mapper {
 		return  customers.stream()
 				.map(Mapper::convertCustomerToCustomerDTO)
 				.toList();
+	}
+	
+
+	public static Employee convertEmployeeDTOToEmployee(EmployeeDTO employeeDTO) {
+		Employee employee = new Employee();
+		BeanUtils.copyProperties(employeeDTO, employee);
+
+		return employee;
 	}
 	
 	public static EmployeeDTO convertEmployeeToEmployeeDTO(Employee employee) {
