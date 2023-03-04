@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.udacity.jdnd.course3.critter.exception.NotFoundException;
 import com.udacity.jdnd.course3.critter.pet.PetRepo;
@@ -16,6 +17,7 @@ import com.udacity.jdnd.course3.critter.user.entity.Employee;
 import com.udacity.jdnd.course3.critter.utils.Mapper;
 
 @Service
+@Transactional
 public class ScheduleService {
 
 	@Autowired
