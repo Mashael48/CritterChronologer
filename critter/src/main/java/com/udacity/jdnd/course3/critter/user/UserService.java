@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.udacity.jdnd.course3.critter.exception.NotFoundException;
 import com.udacity.jdnd.course3.critter.pet.PetService;
 import com.udacity.jdnd.course3.critter.user.entity.Customer;
 import com.udacity.jdnd.course3.critter.user.entity.Employee;
@@ -43,7 +44,11 @@ public class UserService {
 
 	public CustomerDTO getOwnerByPet(Long petId) {
 		Optional<Customer> customer = customerRepo.findByPetsId(petId);
-		return (customer.isPresent()) ? Mapper.convertCustomerToCustomerDTO(customer.get()) : null;
+
+		if (customer.isEmpty())
+			throw new NotFoundException();
+
+		return Mapper.convertCustomerToCustomerDTO(customer.get());
 	}
 
 	public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
@@ -58,19 +63,16 @@ public class UserService {
 		Optional<Employee> employee = employeeRepo.findById(employeeId);
 
 		if (employee.isEmpty())
-			return null;
+			throw new NotFoundException();
 
-		EmployeeDTO dto = new EmployeeDTO();
-		BeanUtils.copyProperties(employee, dto);
-
-		return dto;
+		return Mapper.convertEmployeeToEmployeeDTO(employee.get());
 	}
 
 	public Object setAvailability(Set<DayOfWeek> daysAvailable, Long employeeId) {
 		Optional<Employee> employee = employeeRepo.findById(employeeId);
 
 		if (employee.isEmpty())
-			return null;
+			throw new NotFoundException();
 
 		employee.get().setDaysAvailable(daysAvailable);
 		return employeeRepo.save(employee.get());
@@ -82,7 +84,7 @@ public class UserService {
 	}
 
 	private List<Employee> findEmployeesForService(Set<EmployeeSkill> skills, LocalDate date) {
-		List<Employee> availableEmployees = new ArrayList<>();
+		List<Employee> availableEmployees = new LinkedList<>();
 		List<Employee> employees = this.employeeRepo.findEmployeesByDaysAvailable(date.getDayOfWeek());
 
 		for (Employee employee : employees) {
