@@ -21,7 +21,7 @@ public class Pet {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "NVARCHAR(50)")
 	@Nationalized
 	private String name;
 

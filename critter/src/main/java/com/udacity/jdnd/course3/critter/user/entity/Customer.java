@@ -15,7 +15,7 @@ import lombok.*;
 @DiscriminatorValue("2")
 public class Customer extends Users {
 
-	@Column(nullable = true) // to allow adding employee without it
+	@Column(nullable = true, columnDefinition = "VARCHAR(20)") // to allow adding employee without it
 	private String phoneNumber;
 
 	@Column(nullable = true)
