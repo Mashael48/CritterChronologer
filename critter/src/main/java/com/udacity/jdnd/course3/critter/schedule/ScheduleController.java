@@ -1,8 +1,9 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Handles web requests related to Schedules.
@@ -11,28 +12,31 @@ import java.util.List;
 @RequestMapping("/schedule")
 public class ScheduleController {
 
-    @PostMapping
-    public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        throw new UnsupportedOperationException();
-    }
+	@Autowired
+	private ScheduleService scheduleService;
 
-    @GetMapping
-    public List<ScheduleDTO> getAllSchedules() {
-        throw new UnsupportedOperationException();
-    }
+	@PostMapping
+	public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+		return scheduleService.createSchedule(scheduleDTO);
+	}
 
-    @GetMapping("/pet/{petId}")
-    public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
-    }
+	@GetMapping
+	public List<ScheduleDTO> getAllSchedules() {
+		return scheduleService.getAllSchedules();
+	}
 
-    @GetMapping("/employee/{employeeId}")
-    public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
-    }
+	@GetMapping("/pet/{petId}")
+	public List<ScheduleDTO> getScheduleForPet(@PathVariable Long petId) {
+		return scheduleService.getScheduleForPet(petId);
+	}
 
-    @GetMapping("/customer/{customerId}")
-    public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        throw new UnsupportedOperationException();
-    }
+	@GetMapping("/employee/{employeeId}")
+	public List<ScheduleDTO> getScheduleForEmployee(@PathVariable Long employeeId) {
+		return scheduleService.getScheduleForEmployee(employeeId);
+	}
+
+	@GetMapping("/customer/{customerId}")
+	public List<ScheduleDTO> getScheduleForCustomer(@PathVariable Long customerId) {
+		return scheduleService.getScheduleForCustomer(customerId);
+	}
 }
