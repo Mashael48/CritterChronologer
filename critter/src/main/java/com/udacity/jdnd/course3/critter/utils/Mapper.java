@@ -39,9 +39,7 @@ public class Mapper {
 	}
 
 	public static List<CustomerDTO> convertCustomerToCustomerDTO(List<Customer> customers) {
-		return  customers.stream()
-				.map(Mapper::convertCustomerToCustomerDTO)
-				.toList();
+		return customers.stream().map(Mapper::convertCustomerToCustomerDTO).toList();
 	}
 
 	// ** Employee ** //
@@ -59,9 +57,7 @@ public class Mapper {
 	}
 
 	public static List<EmployeeDTO> convertEmployeeToEmployeeDTO(List<Employee> employees) {
-		return employees.stream()
-				.map(Mapper::convertEmployeeToEmployeeDTO)
-				.toList();
+		return employees.stream().map(Mapper::convertEmployeeToEmployeeDTO).toList();
 	}
 
 	// ** Pet ** //
@@ -76,19 +72,24 @@ public class Mapper {
 		PetDTO petDTO = new PetDTO();
 		BeanUtils.copyProperties(pet, petDTO);
 
+		Customer customer = pet.getCustomer();
+		petDTO.setOwnerId(customer.getId());
+
 		return petDTO;
 	}
 
 	public static List<PetDTO> convertPetToPetDTO(List<Pet> pet) {
-		return pet.stream()
-				.map(Mapper::convertPetToPetDTO)
-				.toList();
+		return pet.stream().map(Mapper::convertPetToPetDTO).toList();
 	}
 
 	// ** Schedule ** //
-	public static Schedule convertScheduleDTOToSchedule(ScheduleDTO scheduleDTO) {
+	public static Schedule convertScheduleDTOToSchedule(ScheduleDTO scheduleDTO, List<Employee> employees, List<Pet> pets) {
 		Schedule schedule = new Schedule();
 		BeanUtils.copyProperties(scheduleDTO, schedule);
+
+		schedule.setActivities(scheduleDTO.getActivities());
+		schedule.setEmployees(employees);
+		schedule.setPets(pets);
 
 		return schedule;
 	}
@@ -97,12 +98,28 @@ public class Mapper {
 		ScheduleDTO scheduleDTO = new ScheduleDTO();
 		BeanUtils.copyProperties(schedule, scheduleDTO);
 
+		// Map employees
+		List<Employee> employees = schedule.getEmployees();
+		List<Long> employeesIds = new LinkedList<>();
+		if (employees != null) {
+			employeesIds = employees.stream().map(Employee::getId).toList();
+		}
+
+		scheduleDTO.setEmployeeIds(employeesIds);
+
+		// Map Pets
+		List<Pet> pets = schedule.getPets();
+		List<Long> petsIds = new LinkedList<>();
+		if (pets != null) {
+			petsIds = pets.stream().map(Pet::getId).toList();
+		}
+
+		scheduleDTO.setPetIds(petsIds);
+
 		return scheduleDTO;
 	}
 
 	public static List<ScheduleDTO> convertScheduleToScheduleDTO(List<Schedule> schedules) {
-		return schedules.stream()
-				.map(Mapper::convertScheduleToScheduleDTO)
-				.toList();
+		return schedules.stream().map(Mapper::convertScheduleToScheduleDTO).toList();
 	}
 }

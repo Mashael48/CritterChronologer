@@ -10,20 +10,21 @@ import com.udacity.jdnd.course3.critter.pet.entity.Pet;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.user.entity.Employee;
 
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Setter
+@Getter
+@ToString
 public class Schedule {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToMany(targetEntity = Employee.class)
 	private List<Employee> employees;
 
-	// fetch = FetchType.LAZY, mappedBy = "schedule", cascade = CascadeType.ALL
 	@ManyToMany(targetEntity = Pet.class)
 	private List<Pet> pets;
 
