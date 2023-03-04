@@ -29,6 +29,7 @@ public class PetService {
 		if (customer.isEmpty())
 			throw new NotFoundException();
 
+		customer.get().addPet(pet);
 		pet.setCustomer(customer.get());
 		return petRepo.save(pet);
 	}

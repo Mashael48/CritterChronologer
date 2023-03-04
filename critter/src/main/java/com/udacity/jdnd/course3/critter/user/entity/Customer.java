@@ -1,6 +1,6 @@
 package com.udacity.jdnd.course3.critter.user.entity;
 
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -23,5 +23,12 @@ public class Customer extends Users {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, targetEntity = Pet.class)
 	private List<Pet> pets;
+
+	public void addPet(Pet pet) {
+		if (pets == null) {
+			pets = new LinkedList<>();
+		}
+		pets.add(pet);
+	}
 
 }
