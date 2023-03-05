@@ -62,7 +62,7 @@ public class ScheduleService {
 	public List<Schedule> getScheduleForCustomer(Long customerId) {
 		Optional<Customer> customer = customerRepo.findById(customerId);
 
-		if (customer.isEmpty()) {
+		if (!customer.isPresent()) {
 			throw new NotFoundException();
 		}
 

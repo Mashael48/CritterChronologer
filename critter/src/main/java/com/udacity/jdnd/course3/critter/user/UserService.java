@@ -37,7 +37,7 @@ public class UserService {
 	public Customer getOwnerByPet(Long petId) {
 		Optional<Customer> customer = customerRepo.findByPetsId(petId);
 
-		if (customer.isEmpty())
+		if (!customer.isPresent())
 			throw new NotFoundException();
 
 		return customer.get();
@@ -50,7 +50,7 @@ public class UserService {
 	public Employee getEmployee(Long employeeId) {
 		Optional<Employee> employee = employeeRepo.findById(employeeId);
 
-		if (employee.isEmpty())
+		if (!employee.isPresent())
 			throw new NotFoundException();
 
 		return employee.get();
@@ -59,7 +59,7 @@ public class UserService {
 	public boolean setAvailability(Set<DayOfWeek> daysAvailable, Long employeeId) {
 		Optional<Employee> employee = employeeRepo.findById(employeeId);
 
-		if (employee.isEmpty())
+		if (!employee.isPresent())
 			throw new NotFoundException();
 
 		employee.get().setDaysAvailable(daysAvailable);

@@ -26,7 +26,7 @@ public class PetService {
 
 		Optional<Customer> customer = customerRepo.findById(ownerId);
 
-		if (customer.isEmpty())
+		if (!customer.isPresent())
 			throw new NotFoundException();
 
 		customer.get().addPet(pet);
@@ -37,7 +37,7 @@ public class PetService {
 	public Pet getPet(Long petId) {
 		Optional<Pet> pet = petRepo.findById(petId);
 
-		if (pet.isEmpty())
+		if (!pet.isPresent())
 			throw new NotFoundException();
 
 		return pet.get();
